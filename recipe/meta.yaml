@@ -1,5 +1,5 @@
 {% set name = "dos2unix" %}
-{% set version = "7.4.1" %}
+{% set version = "7.4.2" %}
 
 package:
   name: {{ name|lower }}
@@ -7,20 +7,29 @@ package:
 
 source:
     url: https://waterlan.home.xs4all.nl/{{name}}/{{name}}-{{ version }}.tar.gz
-    sha256: 1cd58a60b03ed28fa39046102a185c5e88c4f7665e1e0417c25de7f8b9f78623
+    sha256: 6035c58df6ea2832e868b599dfa0d60ad41ca3ecc8aa27822c4b7a9789d3ae01
 
 build:
-  skip: true   # [win]
+  skip: true   # [win and vc<14]
   number: 0
+  ignore_run_exports:  # [linux]
+    - gettext          # [linux]
   script:
-    - make prefix=$PREFIX all
-    - make prefix=$PREFIX install
+    - make prefix=$PREFIX all                    # [linux]
+    - make prefix=$PREFIX install                # [linux]
+    # disable for osx use of NLS ... need to adjust link root
+    - make prefix=$PREFIX all ENABLE_NLS=        # [osx]
+    - make prefix=$PREFIX install ENABLE_NLS=    # [osx]
+    - nmake prefix="%PREFIX%" /f vc.mak clean    # [win]
+    - nmake prefix="%PREFIX%" /f vc.mak          # [win]
+    - nmake prefix="%PREFIX%" /f vc.mak install  # [win]
 
 requirements:
   build:
     - {{ compiler ('c') }}
-    - make
-    - gettext
+    - make                 # [unix]
+    - gettext              # [linux]
+  run:
 test:
   commands:
     - dos2unix -h
