@@ -1,0 +1,5 @@
+anaconda_config_version: 1
+upstream_sources:
+  - webpage:
+      url: https://waterlander.net/dos2unix/
+      regex: dos2unix-([\d.]+)\.tar\.gz
