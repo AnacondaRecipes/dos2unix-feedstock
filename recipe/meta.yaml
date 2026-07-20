@@ -11,10 +11,7 @@ source:
     sha256: 63650acbd0c7fa8623429bcbf93a888e3351a1cad0f556cf41876f5673dd7d0b
 
 build:
-  skip: true   # [win and vc<14]
   number: 0
-  ignore_run_exports:  # [linux]
-    - gettext          # [linux]
   script:
     - make prefix=$PREFIX all                    # [linux]
     - make prefix=$PREFIX install                # [linux]
@@ -24,17 +21,12 @@ build:
     - nmake prefix="%PREFIX%" /f vc.mak clean    # [win]
     - nmake prefix="%PREFIX%" /f vc.mak          # [win]
     - nmake prefix="%PREFIX%" /f vc.mak install  # [win]
-
 requirements:
   build:
-    - {{ stdlib ('c') }}
-    - {{ compiler ('c') }}
+    - {{ stdlib("c") }}
+    - {{ compiler('c') }}
     - make                 # [unix]
     - gettext              # [linux]
-  host:
-    - gettext
-    - libintl-devel  # [osx]
-  run:
 
 test:
   commands:
@@ -42,11 +34,16 @@ test:
     - unix2dos -h
 
 about:
-  home: https://waterlan.home.xs4all.nl/dos2unix.html
+  home: https://sourceforge.net/p/dos2unix/dos2unix/ci/master/tree
   license: BSD-2-Clause
   license_family: BSD
   license_file: COPYING.txt
   summary: "Convert text files with DOS or Mac line breaks to Unix line breaks and vice versa."
+  description: |
+    The Dos2unix package includes utilities dos2unix and unix2dos to convert
+    plain text files in DOS or Mac format to Unix format and vice versa.
+  doc_url: https://sourceforge.net/p/dos2unix/dos2unix/ci/master/tree
+  dev_url: https://sourceforge.net/p/dos2unix/dos2unix/ci/master/tree
 
 extra:
   recipe-maintainers:
