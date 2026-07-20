@@ -1,13 +1,14 @@
 {% set name = "dos2unix" %}
-{% set version = "7.4.2" %}
+{% set version = "7.5.6" %}
 
 package:
-  name: {{ name|lower }}
+  name: {{ name }}
   version: {{ version }}
 
 source:
-    url: https://waterlan.home.xs4all.nl/{{name}}/{{name}}-{{ version }}.tar.gz
-    sha256: 6035c58df6ea2832e868b599dfa0d60ad41ca3ecc8aa27822c4b7a9789d3ae01
+    url: https://sourceforge.net/projects/{{ name }}/files/{{ name }}-{{ version }}.tar.gz/download
+    fn: {{ name }}-{{ version }}.tar.gz
+    sha256: 63650acbd0c7fa8623429bcbf93a888e3351a1cad0f556cf41876f5673dd7d0b
 
 build:
   skip: true   # [win and vc<14]
@@ -26,10 +27,15 @@ build:
 
 requirements:
   build:
+    - {{ stdlib ('c') }}
     - {{ compiler ('c') }}
     - make                 # [unix]
     - gettext              # [linux]
+  host:
+    - gettext
+    - libintl-devel  # [osx]
   run:
+
 test:
   commands:
     - dos2unix -h
